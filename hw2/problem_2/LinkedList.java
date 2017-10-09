@@ -187,13 +187,12 @@ public class LinkedList<T> {
 	//override toString
 	@Override
 	public String toString() {
-		String retStr = "HEAD->";
+		String retStr = "";
 		Node tmp = head;
 		while( tmp != null ) {
-			retStr += tmp.getData() + "->";
+			retStr += tmp.getData() + " ";
 			tmp = tmp.getNext();
 		}
-		retStr += "NULL";
 		return retStr;
 	}
 
