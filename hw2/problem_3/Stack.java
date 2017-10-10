@@ -10,14 +10,21 @@ public class Stack {
 	}
 
 	public boolean isEmpty() {
-		return size == 0;
+		if( curr == 0 ) { return arr[arr.length-1] == null; }
+		else { return arr[curr-1] == null; }
 	}
 
 	public int size() {
+		int ctr = 0;
+		for( int i = 0; i < arr.length; i++ ) {
+			if( arr[i] != null )
+				ctr++;
+		}
 		return size;
 	}
 
 	public void push( String item ) {
+		if( arr.length == 0 ) { return; }
 		if( curr == arr.length ) {
 			curr = 0;
 		}
@@ -26,7 +33,8 @@ public class Stack {
 		//System.out.println(curr);
 	}
 
-	public String pop() {
+	public String pop() throws Exception {
+		if( isEmpty() ) { throw new Exception("Stack is empty"); }
 		String temp = arr[curr-1];
 		arr[curr-1] = null;
 		curr--;
@@ -48,6 +56,9 @@ public class Stack {
 			if( j == 0 ) {
 				j = arr.length;
 			}
+		}
+		if( arr.length == 0 ) {
+			str += "empty stack";
 		}
 		return str;
 		//*/
