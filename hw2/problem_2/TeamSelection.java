@@ -84,15 +84,25 @@ public class TeamSelection {
 			LinkedList<Player> players = new LinkedList<Player>();
 			String[] jerseyNumbers = ((String)(lines.get(2*i+1)).getData()).split(" ");
 			String[] heights = ((String)(lines.get(2*i+2)).getData()).split(" ");
+
+			//exceptions- jerseyNumbers != heights, jerseyNumbers has no values, heights has no values
+			if( jerseyNumbers.length != heights.length ) {
+				System.out.println("Invalid input for test case " + i);
+				break;
+			}
+
+			//System.out.println("" + jerseyNumbers.length + " " + heights.length + "\nm" + lines.get(2*i+1) + "m\nm" + lines.get(2*i+2));
+
 			for( int j = 0; j < jerseyNumbers.length; j++ ) {
 				Player p = new Player(Integer.parseInt(jerseyNumbers[j]), 
 					               Integer.parseInt(heights[j]));
 				players.add(p);
 			}
-			for( int k = 0; k < players.size() - 1; k++ ) {
-				if( ( (Player)(players.get(k).getData()) ).compareTo( (Player)(players.get(k+1).getData()) ) < 0) {
-					players.remove(k);
-					k -= 2;
+
+			for( int k = 1; k < players.size(); k++ ) {
+				if( ( (Player)(players.get(k-1).getData()) ).compareTo( (Player)(players.get(k).getData()) ) < 0) {
+					players.remove(k-1);
+					k -= 1;
 				}
 			}
 			System.out.println(players);
