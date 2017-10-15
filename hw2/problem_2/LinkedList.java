@@ -52,6 +52,8 @@ public class LinkedList<T> {
 			return temp;
 		}
 
+
+
 		//override toString()
 		public String toString() { return data.toString(); }
 
@@ -128,6 +130,14 @@ public class LinkedList<T> {
 
 
 	// ~~~~~~~~~~~~~~~~~~~ REMOVE OPERATIONS ~~~~~~~~~~~~~~~~~~~
+	//removes given node
+	public void delete( Node val ) {
+		Node tmp = val.getPrev();
+		tmp.setNext(val.getNext());
+		val.getNext().setPrev(tmp);
+		size--;
+	}
+
 	//removes object at index from list
 	public Node remove( int index ) {
 		if( index < 0 || index >= size() )
