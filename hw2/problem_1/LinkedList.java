@@ -1,4 +1,50 @@
 public class LinkedList<T> {
+
+	// Node inner class
+
+	class Node<T> {
+		//instance vars
+		private T data;
+		private Node next;
+
+		//constructor
+		public Node() {
+			data = null;
+			next = null;
+		}
+
+		public Node( T value ) {
+			data = value;
+			next = null;
+		}
+
+		public Node( T value, Node next ) {
+			data = value;
+			this.next = next;
+		}	
+
+		//accessors
+		public T getData() { return data; }
+		public Node getNext() { return next; }
+
+		//mutators
+		public T setData( T newData ) {
+			T temp = getData();
+			data = newData;
+			return temp;
+		}
+
+		public Node setNext( Node newNext ) {
+			Node temp = next;
+			next = newNext;
+			return temp;
+		}
+
+		//override toString()
+		public String toString() { return data.toString(); }
+
+	}
+
 	// instance vars
 	private Node head, tail;
 	private int size;
@@ -187,13 +233,12 @@ public class LinkedList<T> {
 	//override toString
 	@Override
 	public String toString() {
-		String retStr = "HEAD->";
+		String retStr = "";
 		Node tmp = head;
 		while( tmp != null ) {
-			retStr += tmp.getData() + "->";
+			retStr += tmp.getData() + " ";
 			tmp = tmp.getNext();
 		}
-		retStr += "NULL";
 		return retStr;
 	}
 
@@ -241,49 +286,5 @@ public class LinkedList<T> {
 		System.out.println( james + "\tsize: " + james.size() );
 	}
 	*/
-
-}
-
-
-class Node<T> {
-	//instance vars
-	private T data;
-	private Node next;
-
-	//constructor
-	public Node() {
-		data = null;
-		next = null;
-	}
-
-	public Node( T value ) {
-		data = value;
-		next = null;
-	}
-
-	public Node( T value, Node next ) {
-		data = value;
-		this.next = next;
-	}	
-
-	//accessors
-	public T getData() { return data; }
-	public Node getNext() { return next; }
-
-	//mutators
-	public T setData( T newData ) {
-		T temp = getData();
-		data = newData;
-		return temp;
-	}
-
-	public Node setNext( Node newNext ) {
-		Node temp = next;
-		next = newNext;
-		return temp;
-	}
-
-	//override toString()
-	public String toString() { return data.toString(); }
 
 }

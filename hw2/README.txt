@@ -13,3 +13,6 @@ Place "in3.txt" in folder.
 javac *.java; java LeakyStack
 
 PROBLEM_4:.
+cd problem_4
+Place "in4.txt" in folder
+javac *.java; java WhiteWalker

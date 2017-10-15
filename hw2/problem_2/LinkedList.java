@@ -1,4 +1,62 @@
+// This is a doubly-linked list
+
 public class LinkedList<T> {
+
+	// Node inner class
+
+	class Node<T> {
+		//instance vars
+		private T data;
+		private Node next, prev;
+
+		//constructor
+		public Node() {
+			data = null;
+			next = null;
+			prev = null;
+		}
+
+		public Node( T value ) {
+			data = value;
+			next = null;
+			prev = null;
+		}
+
+		public Node( T value, Node prev, Node next ) {
+			data = value;
+			this.next = next;
+			this.prev = prev;
+		}	
+
+		//accessors
+		public T getData() { return data; }
+		public Node getNext() { return next; }
+		public Node getPrev() { return prev; }
+
+		//mutators
+		public T setData( T newData ) {
+			T temp = getData();
+			data = newData;
+			return temp;
+		}
+
+		public Node setNext( Node newNext ) {
+			Node temp = getNext();
+			next = newNext;
+			return temp;
+		}
+
+		public Node setPrev( Node newPrev ) {
+			Node temp = prev;
+			prev = newPrev;
+			return temp;
+		}
+
+		//override toString()
+		public String toString() { return data.toString(); }
+
+	}
+
 	// instance vars
 	private Node head, tail;
 	private int size;
@@ -15,7 +73,7 @@ public class LinkedList<T> {
 	// ~~~~~~~~~~~~~~~~~~~ ADD OPERATIONS ~~~~~~~~~~~~~~~~~~~
 	//adds object at index
 	public void add( int index, T newVal ) {
-		if( index < 0 || index > size() )
+		if( index < 0 || index == size() )
 			throw new IndexOutOfBoundsException();
 		else if( index == 0 ) 
 			addFirst(newVal);
@@ -28,8 +86,9 @@ public class LinkedList<T> {
 			for( int i = 0; i < index-1; i++ )
 				tmp1 = tmp1.getNext();
 
-			Node newNode = new Node(newVal, tmp1.getNext());
+			Node newNode = new Node(newVal, tmp1, tmp1.getNext());
 			tmp1.setNext(newNode);
+			newNode.getNext().setPrev(newNode);
 
 			size++;
 		}
@@ -37,9 +96,12 @@ public class LinkedList<T> {
 
 	//adds object to front of list
 	public void addFirst( T newVal ) {
-		head = new Node(newVal, head);
+		head = new Node(newVal, null, head);
 		if( size == 0 ) {
 			tail = head;
+		}
+		else {
+			head.getNext().setPrev(head);
 		}
 		size++;
 	}
@@ -47,12 +109,12 @@ public class LinkedList<T> {
 	//adds object to end of list
 	public void addLast( T newVal ) {
 		if( size == 0 ) {
-			tail = new Node(newVal, null);
+			tail = new Node(newVal, tail, null);
 			head = tail;
 		}
 		else {
 			Node tmp = tail;
-			tail = new Node(newVal, null);
+			tail = new Node(newVal, tail, null);
 			tmp.setNext(tail);
 		}
 		size++;
@@ -68,16 +130,17 @@ public class LinkedList<T> {
 	// ~~~~~~~~~~~~~~~~~~~ REMOVE OPERATIONS ~~~~~~~~~~~~~~~~~~~
 	//removes object at index from list
 	public Node remove( int index ) {
-		if( index < 0 || index > size() )
+		if( index < 0 || index >= size() )
 			throw new IndexOutOfBoundsException();
 		else if( index == 0 ) 
 			return removeFirst();
-		else if( index == size() )
+		else if( index == size()-1 )
 			return removeLast();
 		else {
 			Node tmp = get(index-1);
 			Node removedNode = tmp.getNext();
 			tmp.setNext(removedNode.getNext());
+			removedNode.getNext().setPrev(tmp);
 			
 			size--;
 			return removedNode;
@@ -92,6 +155,7 @@ public class LinkedList<T> {
 		}
 		else {
 			head = head.getNext();
+			head.setPrev(null);
 		}
 		size--;
 		return first;
@@ -104,7 +168,7 @@ public class LinkedList<T> {
 			head = tail = null;
 		}
 		else {
-			tail = get(size-1);
+			tail = tail.getPrev();
 			tail.setNext(null);
 		}
 		size--;
@@ -116,11 +180,11 @@ public class LinkedList<T> {
 	// ~~~~~~~~~~~~~~~~~~~ GETTER OPERATIONS ~~~~~~~~~~~~~~~~~~~
 	//returns object at index
 	public Node get( int index ) {
-		if( index < 0 || index > size() )
+		if( index < 0 || index >= size() )
 			throw new IndexOutOfBoundsException();
 		else if( index == 0 ) 
 			return getFirst();
-		else if( index == size() )
+		else if( index == size()-1 )
 			return getLast();
 		else {
 			Node tmp = head;
@@ -201,88 +265,44 @@ public class LinkedList<T> {
 		LinkedList james = new LinkedList();
 
 		System.out.println("initially: " );
-		System.out.println( james + "\tsize: " + james.size() );
+		System.out.println( james.size() + "\t " + james );
 
 		james.add("beat");
-		System.out.println( james + "\tsize: " + james.size() );
+		System.out.println( james.size() + "\t " + james );
 
 		james.add("a");
-		System.out.println( james + "\tsize: " + james.size() );
+		System.out.println( james.size() + "\t " + james );
 
 		james.add("need");
-		System.out.println( james + "\tsize: " + james.size() );
+		System.out.println( james.size() + "\t " + james );
 
 		james.add("I");
-		System.out.println( james + "\tsize: " + james.size() );
+		System.out.println( james.size() + "\t " + james );
 
 		james.add(0,"whut");
 		System.out.println( "...after add(0,whut): " );
-		System.out.println( james + "\tsize: " + james.size() );
+		System.out.println( james.size() + "\t " + james );
 
 		james.add(4,"phat");
 		System.out.println( "...after add(4,phat): " );
-		System.out.println( james + "\tsize: " + james.size() );
+		System.out.println( james.size() + "\t " + james );
 
 		System.out.println( "...after remove last: "
 				    + james.remove( james.size()-1) );
-		System.out.println( james + "\tsize: " + james.size() );
+		System.out.println( james.size() + "\t " + james );
 
 		System.out.println( "...after remove(0): " + james.remove(0) );
-		System.out.println( james + "\tsize: " + james.size() );
+		System.out.println( james.size() + "\t " + james );
 
 		System.out.println( "...after remove(0): " + james.remove(0) );
-		System.out.println( james + "\tsize: " + james.size() );
+		System.out.println( james.size() + "\t " + james );
 
 		System.out.println( "...after remove(0): " + james.remove(0) );
-		System.out.println( james + "\tsize: " + james.size() + "\n\n" );
+		System.out.println( james.size() + "\t " + james );
 
 		james.add("a");
-		System.out.println( james + "\tsize: " + james.size() );
+		System.out.println( james.size() + "\t " + james );
 	}
 	*/
-
-}
-
-
-class Node<T> {
-	//instance vars
-	private T data;
-	private Node next;
-
-	//constructor
-	public Node() {
-		data = null;
-		next = null;
-	}
-
-	public Node( T value ) {
-		data = value;
-		next = null;
-	}
-
-	public Node( T value, Node next ) {
-		data = value;
-		this.next = next;
-	}	
-
-	//accessors
-	public T getData() { return data; }
-	public Node getNext() { return next; }
-
-	//mutators
-	public T setData( T newData ) {
-		T temp = getData();
-		data = newData;
-		return temp;
-	}
-
-	public Node setNext( Node newNext ) {
-		Node temp = next;
-		next = newNext;
-		return temp;
-	}
-
-	//override toString()
-	public String toString() { return data.toString(); }
 
 }
