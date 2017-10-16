@@ -88,11 +88,11 @@ public class FriendList {
 		return arr;
 	}
 
-	public static int josephus( int total, int keep ) {
+	public static int findSafe( int total, int keep ) {
 		if( total == 1)
 			return total;
 		else {
-			return ((josephus(total-1, keep) + keep-1 ) % total) + 1;
+			return ((findSafe(total-1, keep) + keep-1 ) % total) + 1;
 		}
 	}
 
@@ -216,7 +216,7 @@ public class FriendList {
 					keep[x] = ((Friend)(bucketF.getFirst().getData()));
 				}
 				else {
-					int safe = josephus(bucketF.size(), num_keep);
+					int safe = findSafe(bucketF.size(), num_keep);
 					keep[x] = ((Friend)(bucketF.get(safe-1).getData()));
 				}
 			}
