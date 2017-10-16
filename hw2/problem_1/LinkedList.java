@@ -1,4 +1,4 @@
-//this is a singly linked list
+// This is a doubly-linked list
 
 public class LinkedList<T> {
 
@@ -7,27 +7,31 @@ public class LinkedList<T> {
 	class Node<T> {
 		//instance vars
 		private T data;
-		private Node next;
+		private Node next, prev;
 
 		//constructor
 		public Node() {
 			data = null;
 			next = null;
+			prev = null;
 		}
 
 		public Node( T value ) {
 			data = value;
 			next = null;
+			prev = null;
 		}
 
-		public Node( T value, Node next ) {
+		public Node( T value, Node prev, Node next ) {
 			data = value;
 			this.next = next;
+			this.prev = prev;
 		}	
 
 		//accessors
 		public T getData() { return data; }
 		public Node getNext() { return next; }
+		public Node getPrev() { return prev; }
 
 		//mutators
 		public T setData( T newData ) {
@@ -37,10 +41,18 @@ public class LinkedList<T> {
 		}
 
 		public Node setNext( Node newNext ) {
-			Node temp = next;
+			Node temp = getNext();
 			next = newNext;
 			return temp;
 		}
+
+		public Node setPrev( Node newPrev ) {
+			Node temp = prev;
+			prev = newPrev;
+			return temp;
+		}
+
+
 
 		//override toString()
 		public String toString() { return data.toString(); }
@@ -63,7 +75,7 @@ public class LinkedList<T> {
 	// ~~~~~~~~~~~~~~~~~~~ ADD OPERATIONS ~~~~~~~~~~~~~~~~~~~
 	//adds object at index
 	public void add( int index, T newVal ) {
-		if( index < 0 || index > size() )
+		if( index < 0 || index == size() )
 			throw new IndexOutOfBoundsException();
 		else if( index == 0 ) 
 			addFirst(newVal);
@@ -76,8 +88,9 @@ public class LinkedList<T> {
 			for( int i = 0; i < index-1; i++ )
 				tmp1 = tmp1.getNext();
 
-			Node newNode = new Node(newVal, tmp1.getNext());
+			Node newNode = new Node(newVal, tmp1, tmp1.getNext());
 			tmp1.setNext(newNode);
+			newNode.getNext().setPrev(newNode);
 
 			size++;
 		}
@@ -85,9 +98,12 @@ public class LinkedList<T> {
 
 	//adds object to front of list
 	public void addFirst( T newVal ) {
-		head = new Node(newVal, head);
+		head = new Node(newVal, null, head);
 		if( size == 0 ) {
 			tail = head;
+		}
+		else {
+			head.getNext().setPrev(head);
 		}
 		size++;
 	}
@@ -95,12 +111,12 @@ public class LinkedList<T> {
 	//adds object to end of list
 	public void addLast( T newVal ) {
 		if( size == 0 ) {
-			tail = new Node(newVal, null);
+			tail = new Node(newVal, tail, null);
 			head = tail;
 		}
 		else {
 			Node tmp = tail;
-			tail = new Node(newVal, null);
+			tail = new Node(newVal, tail, null);
 			tmp.setNext(tail);
 		}
 		size++;
@@ -114,6 +130,14 @@ public class LinkedList<T> {
 
 
 	// ~~~~~~~~~~~~~~~~~~~ REMOVE OPERATIONS ~~~~~~~~~~~~~~~~~~~
+	//removes given node
+	public void delete( Node val ) {
+		Node tmp = val.getPrev();
+		tmp.setNext(val.getNext());
+		val.getNext().setPrev(tmp);
+		size--;
+	}
+
 	//removes object at index from list
 	public Node remove( int index ) {
 		if( index < 0 || index >= size() )
@@ -126,6 +150,7 @@ public class LinkedList<T> {
 			Node tmp = get(index-1);
 			Node removedNode = tmp.getNext();
 			tmp.setNext(removedNode.getNext());
+			removedNode.getNext().setPrev(tmp);
 			
 			size--;
 			return removedNode;
@@ -140,6 +165,7 @@ public class LinkedList<T> {
 		}
 		else {
 			head = head.getNext();
+			head.setPrev(null);
 		}
 		size--;
 		return first;
@@ -152,7 +178,7 @@ public class LinkedList<T> {
 			head = tail = null;
 		}
 		else {
-			tail = get(size-2);
+			tail = tail.getPrev();
 			tail.setNext(null);
 		}
 		size--;
@@ -232,6 +258,13 @@ public class LinkedList<T> {
 		tail = null;
 	}
 
+	//swaps two elements in the list
+	public void swap( Node a, Node b ) {
+		T tmp = (T)(a.getData());
+		a.setData(b.getData());
+		b.setData(tmp);
+	}
+
 	//override toString
 	@Override
 	public String toString() {
@@ -287,6 +320,6 @@ public class LinkedList<T> {
 		james.add("a");
 		System.out.println( james.size() + "\t " + james );
 	}
-	*/	
+	*/
 
 }
