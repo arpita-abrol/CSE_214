@@ -163,16 +163,15 @@ public class FriendList {
 				numMutual[n] = Integer.parseInt(numMutualTmp[n]);
 
 			// Create buckets
-			int minMF = numMutual[0];
-			int maxMF = numMutual[0];
+			double minMF = numMutual[0];
+			double maxMF = numMutual[0];
 			for( int num : numMutual ) {
 				if( num < minMF )
 					minMF = num;
 				if( num > maxMF )
 					maxMF = num;
 			}
-			int range = Math.round((maxMF - minMF + 1)/num_keep);
-			System.out.println("" + range);
+			double range = Math.round((maxMF - minMF + 1)/num_keep);
 			/*for( int j = 0; j < num_keep; j++ ) {
 				if( j == num_keep-1 ) {
 					Bucket tmp = new Bucket(minMF+j*range, maxMF);
