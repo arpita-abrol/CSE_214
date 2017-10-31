@@ -4,27 +4,33 @@ public class 234Tree {
 
 	}
 
+	// 4
 	public void insert( int num ) {
 
 
 	}
 
-	public int delete( int num ) {
+	// 3
+	public boolean delete( int num ) {
 
 	}
 
-	public int search( int num ) {
+	// 4
+	public boolean search( int num ) {
 
 	}
 
+	// 3
 	public int[] inorder() {
 
 	}
 
+	// 3
 	public int[] preorder() {
 
 	}
 
+	// 3
 	public int[] postorder() {
 
 	}

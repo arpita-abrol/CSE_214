@@ -54,7 +54,21 @@ public class ConcertMoney {
 			for( int n = 0; n < numRows; n++ ) 
 				rows[n] = Integer.parseInt(rowsTmp[n]);
 
-			System.out.println("" + numRows + "\t" + numFans + "\n" + Arrays.toString(rows));
+			maxHeap heap = new maxHeap(numRows);
+			for( int n = 0; n < numRows; n++ ) {
+				heap.insert(rows[n]);
+			}
+
+			int money = 0;
+
+			while( numFans > 0 ) {
+				int tmp = heap.deleteMax();
+				heap.insert(tmp-1);
+				money += tmp;
+				numFans--;
+			}
+
+			System.out.println(money);
 		}
 
 	} //end main
