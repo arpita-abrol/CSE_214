@@ -35,21 +35,18 @@ public class TestTree {
 			//e.printStackTrace();
 		}
 
-		if( numTests == 0 ) {
-			System.out.println("0 operations given");
-			return;
-		}
-
 		if( operations != lines.size() -1 ) {
 			System.out.println("Number of operations given does not match number of operations specified");
 			return;
 		}
 
 
-		234Tree tree = new 234Tree();
+		Tree234 tree = new Tree234();
 
 		for( int i = 0; i < operations; i++ ) { //one iteration of the for loop per operation
-			String[] opTmp = ((String)(lines.get(2*i+2)).getData()).split(" ");
+			//System.out.println("" + i);
+
+			String[] opTmp = ((String)(lines.get(i+1)).getData()).split(" ");
 			int[] op = new int[opTmp.length];
 
 			for( int n = 0; n < opTmp.length; n++ ) 
@@ -57,16 +54,24 @@ public class TestTree {
 
 			if( op[0] == 1 )
 				tree.insert(op[1]);
-			else if( op[0] == 2 )
-				tree.delete(op[1]);
-			else if( op[0] == 3 )
-				tree.search(op[1]);
+			else if( op[0] == 2 ) {
+				if( tree.delete(op[1]) )
+					System.out.println("successful");
+				else
+					System.out.println("failed");
+			}
+			else if( op[0] == 3 ) {
+				if( tree.search(tree.getRoot(), op[1]) )
+					System.out.println("successful");
+				else
+					System.out.println("successful");
+			}
 			else if( op[0] == 4 ) 
-				tree.inorder();
+				System.out.println(tree.inorder(tree.getRoot()));
 			else if( op[0] == 5 )
-				tree.preorder();
+				System.out.println(tree.preorder(tree.getRoot()));
 			else if( op[0] == 6 )
-				tree.postorder();
+				System.out.println(tree.postorder(tree.getRoot()));
 			else
 				System.out.println("Operation not identified");
 
