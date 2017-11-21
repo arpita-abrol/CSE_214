@@ -2,74 +2,105 @@ import java.io.File;
 import java.util.Scanner;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.HashMap;
+import java.util.Hashtable;
 
-public class Triples {
+public class MagicTriples {
+
+	private static class Triple {
+		int num1, num2, num3;
+
+		public Triple( int num1, int num2, int num3 ) {
+			this.num1 = num1;
+			this.num2 = num2;
+			this.num3 = num3;
+		}
+
+		public int getVal() {
+			return num1 + num2;
+		}
+
+		public String toString() {
+			return "[" + num1 + "," + num2 + "," + num3 + "]";
+		}
+
+		public boolean equals( Object object ) {
+			Triple t = (Triple)(object);
+			if( this.num1 == t.num1 && this.num2 == t.num2 && this.num3 == t.num3 )
+				return true;
+			return false;
+		}
+
+		public int hashCode() {
+			return num1 + num2;
+		}
+	}
+
+	private static class Double {
+		int num1, num2;
+
+		public Double( int num1, int num2 ) {
+			this.num1 = num1;
+			this.num2 = num2;
+		}
+
+		public int getVal() {
+			return num1 + num2;
+		}
+
+		public String toString() {
+			return "[" + num1 + "," + num2 + "]";
+		}
+
+		public boolean equals( Object object ) {
+			Double t = (Double)(object);
+			if( this.num1 == t.num1 && this.num2 == t.num2  )
+				return true;
+			return false;
+		}
+
+		public int hashCode() {
+			return num1 + num2;
+		}
+	}
 
 	public static int numTriples( int n, int m, int[] nums ) {
 		int ctr = 0;
 
-		HashMap all = new HashMap(n);
+		Hashtable<Integer, LinkedList<Double>> two = new Hashtable<Integer, LinkedList<Double>>();
+		Hashtable<Triple, Integer> three = new Hashtable<Triple, Integer>();
 
-		int max = findMax(nums);
-
-		for( int i = 0; i < n; i++ ) {
-			all.put(i, nums[i]);
-		}
-
-		for( int i = 0; i < n; i++ ) {
+		for( int i = 0; i < n-1; i++ ) {
 			for( int j = i+1; j < n; j++ ) {
 				int key = ( nums[i] + nums[j] ) % m;
 
-				if( nums[i] == key && nums[j] == key ) {
-					int tmp1 = indexOfDouble(nums, key)[0];
-					int tmp2 = indexOfDouble(nums, key)[1];
-					all.remove(tmp1);
-					all.remove(tmp2);
-					int tmp = key;
-					while( tmp <= max ) {
-						if( all.containsValue(tmp) ) {
-							if( indexOfTriple(nums, tmp)[2] > j ) {
-								ctr++;
-								System.out.println(i + "\t" + j + "\t" + indexOfTriple(nums, tmp)[2]);
-							}
-						}
-						tmp += m;
-					}
-					all.put(tmp1, key);
-					all.put(tmp2, key);
-				}
+				Double pair = new Double(i, j);
+				LinkedList<Double> l = two.getOrDefault(key, new LinkedList<Double>());
+				l.add(pair);
+				two.put(key, l);
+			}
+		}
 
-				else if( nums[i] == key || nums[j] == key ) {
-					int tmp1 = indexOf(nums, key);
-					all.remove(tmp1);
-					int tmp = key;
-					while( tmp <= max ) {
-						if( all.containsValue(tmp) ) {
-							if( indexOfDouble(nums, tmp)[1] > j ){
-								ctr++;
-								System.out.println(i + "\t" + j + "\t" + indexOfDouble(nums, tmp)[1]);
-							}
-						}
-						tmp += m;
-					}
-					all.put(tmp1, key);
-				}
+		for( int i = 0; i < n; i++ ) {
+			int key2 = (m - (nums[i] % m)) % m;
 
-				else {
-					int tmp = key;
-					while( tmp <= max ) {
-						if( all.containsValue(tmp) ) {
-							if( indexOf(nums, tmp) > j ){
-								ctr++;
-								System.out.println(i + "\t" + j + "\t" + indexOf(nums, tmp));
-							}
+			if( two.containsKey(key2) ) {
+				LinkedList<Double> l = two.get(key2);
+				for( Double x : l ) {
+					if( x.num1 != i && x.num2 != i ) {
+						int[] all = { x.num1, x.num2, i };
+						Arrays.sort(all);
+						Triple t = new Triple(all[0], all[1], all[2]);
+
+						if( !(three.containsKey(t)) ) {
+							three.put(t, 0);
+							System.out.println(Arrays.toString(all));
+							ctr++;
 						}
-						tmp += m;
 					}
 				}
 			}
 		}
+
 
 		return ctr;
 	}
@@ -121,15 +152,6 @@ public class Triples {
 			}
 		}
 		return val;
-	}
-
-	public static int findMax( int[] arr ) {
-		int max = arr[0];
-		for( int x : arr ) {
-			if( x > max )
-				max = x;
-		}
-		return max;
 	}
 
 

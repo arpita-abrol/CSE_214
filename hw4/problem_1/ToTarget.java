@@ -11,15 +11,30 @@ public class ToTarget {
 
 		HashMap all = new HashMap(n);
 
-		for( int j = 0; j < n; j++ ) {
-			all.put(nums[j], j);
-		}
+		int numMid = 0;
 
 		for( int j = 0; j < n; j++ ) {
-			if( all.containsKey(t-nums[j]) ) {
-				val[0] = j;
-				val[1] = (Integer)(all.get(t-nums[j]));
-				break;
+			all.put(nums[j], j);
+			if( nums[j] == mid )
+				numMid++;
+		}
+
+		if( t%2 == 0 && numMid == 1 ) {
+			for( int j = 0; j < n; j++ ) {
+				if( all.containsKey(t-nums[j]) && nums[j] != mid ) {
+					val[0] = j;
+					val[1] = (Integer)(all.get(t-nums[j]));
+					break;
+				}
+			}
+		}
+		else {
+			for( int j = 0; j < n; j++ ) {
+				if( all.containsKey(t-nums[j]) ) {
+					val[0] = j;
+					val[1] = (Integer)(all.get(t-nums[j]));
+					break;
+				}
 			}
 		}
 
